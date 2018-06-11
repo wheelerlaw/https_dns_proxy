@@ -4,6 +4,22 @@ set -ex
 function build(){
     cmake .
     make
+
+    #### Create output directory for dpkg-deb
+    mkdir -p out/usr/local/bin
+    cp https_dns_proxy out/usr/local/bin
+
+    mkdir -p out/DEBIAN
+    cp debian/control out/DEBIAN
+
+    dpkg-deb --build out https-dns-proxy.deb
+
+}
+
+function clean() {
+    while read line; do
+        rm -rf $line
+    done < .gitignore
 }
 
 function cron() {
@@ -35,11 +51,23 @@ function cron() {
     exit
 }
 
-
-#### If we're running in a cron job, check the upstream version against the repo version. If a newer version is available, then update to that
-#### version, and tag a new commit. Travis will pick up the tagged commit and build the deb and deploy it. 
-if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
+case $1 in
+clean)
+    clean
+    ;;
+cron)
     cron
-else
+    ;;
+build)
     build
-fi
+    ;;
+*)
+    #### If we're running in a cron job, check the upstream version against the repo version. If a newer version is available, then update to that
+    #### version, and tag a new commit. Travis will pick up the tagged commit and build the deb and deploy it. 
+    if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
+        cron
+    else
+        build
+    fi
+    ;;
+esac
