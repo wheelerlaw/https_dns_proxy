@@ -1,0 +1,28 @@
+language: c++
+sudo: false
+dist: trusty
+branches:
+  only:
+  - master
+addons:
+  apt:
+    packages:
+    - libc-ares-dev
+    - libcurl4-openssl-dev
+    - libev-dev
+    - curl
+    - gettext
+    - jq
+    - git
+script:
+- "./build"
+deploy:
+  provider: releases
+  file: mk.exe
+  skip_cleanup: true
+  api_key: "$GITHUB_TOKEN"
+  verbose: true
+  on:
+    tags: true
+env:
+  secure: nQTEecPAPW6CYqlI0Q/GyOXHJ8eSvi69iwQN+Ri6dlQnsmaXL3ZjYuFRbszjc4tYiVKpQEwFcV2pde9JUl/nm6KP08fTvLEWUg4AQRVq7aad97XVaCtBnSHgDpzWrYdy4m2ityzKDL2GFkW/MvZxU2ewdB2Y98EOqiqCSFjmw/Ix/8BpYK76xCfHsLaqfNrfUcxFOEXCT5G0520WyFDGDoGJblJyNDHkCxGdaTg3yneJ+Ess+7UoksRFCmysSQy7VD6++yTI8CUrsBEV4RfPm910nCSxu5j6ztp8ouMixSovakwYceNoIGnSDm04HBfPcU8/ZQjY8vb9rEwngR3LARxJBkGW4E3eJ06OSyDSnAezL9wDltjIMiHkgWNIKL5+mEoGa5dwxCohbyxke3tBUn8oyVCMwiaAgwKzrVkaMBCz1jyPTHDRUeo6VgfrnCK5NyLgLXMU1bEu8y3P8vIwGM7EEGYjg5nOxgaH4CuGkvl4tSM7E3AUyux5bjjQ7ccEPg0vtC5WJABMQPvrpka1q47sRqDGKVR3fSNvKNtfDRY+akgZd7rgqfOAgySlCCaYMqLzQHifC6klOe5Rd3ITlWbE21F7GWO1dmuTaKbb8x3CCgjZ90DdE8mgI7rdK7sPPleZNfyanwPtUSivN3F3TYy0gMKQN9ZRyKpHaBX35s0=
