@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -ex
+version="0.1"
+
+function build(){
+    cmake .
+    make
+
+    #### Create output directory for dpkg-deb
+    mkdir -p out/usr/local/bin
+    cp https_dns_proxy out/usr/local/bin
+
+    mkdir -p out/DEBIAN
+    export version="$version"
+    envsubst '${version}' < debian/control > out/DEBIAN/control 
+
+    mkdir -p out/usr/lib/systemd/system/
+    cp https-dns-proxy.service out/usr/lib/systemd/system
+
+    dpkg-deb --build out https-dns-proxy_${version}_amd64.deb
+}
+
+function install() {
+    apt-get install ./https_dns_proxy.deb
+}
+
+function clean() {
+    while read line; do
+        rm -rf $line
+    done < .gitignore
+}
+
+function cron() {
+    git clone "https://wheelerlaw:$GITHUB_TOKEN@github.com/wheelerlaw/https_dns_proxy.git"
+    cd https_dns_proxy
+    git remote add upstream "https://github.com/aarond10/https_dns_proxy.git"
+    git config user.name "Wheeler Law"
+    git config user.email "whelderwheels613@gmail.com"
+
+    # Synchronize with upstream
+    git pull upstream master
+    
+    # Execute the build function, above
+    build
+
+    git push
+    exit
+}
+
+case $1 in
+clean)
+    clean
+    ;;
+cron)
+    cron
+    ;;
+build)
+    build
+    ;;
+*)
+    #### If we're running in a cron job, check the upstream version against the repo version. If a newer version is available, then update to that
+    #### version, and tag a new commit. Travis will pick up the tagged commit and build the deb and deploy it. 
+    if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
+        cron
+    else
+        build
+    fi
+    ;;
+esac
