@@ -15,7 +15,7 @@ function build(){
     envsubst '${version}' < debian/control > out/DEBIAN/control 
 
     mkdir -p out/etc/default
-    cp https-dns-proxy.default out/etc/default/
+    cp https-dns-proxy.default out/etc/default/https-dns-proxy
 
     mkdir -p out/lib/systemd/system/
     cp https-dns-proxy.service out/lib/systemd/system
