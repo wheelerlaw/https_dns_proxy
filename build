@@ -19,7 +19,7 @@ function build(){
 }
 
 function install() {
-    sudo apt-get install ./https_dns_proxy.deb
+    apt-get install ./https_dns_proxy.deb
 }
 
 function clean() {
