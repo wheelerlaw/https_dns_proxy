@@ -4,4 +4,10 @@ Required=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=/usr/local/bin/https_dns_proxy
+User=nobody
+Group=nogroup
+EnvironmentFile=-/etc/default/https-dns-proxy
+ExecStart=/usr/local/bin/https_dns_proxy ${DAEMON_ARGS}
+
+[Install]
+WantedBy=multi-user.target
