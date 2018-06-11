@@ -1,21 +1,24 @@
 #!/usr/bin/env bash
 set -ex
-version="0.1"
+version="0.2"
 
 function build(){
     cmake .
     make
 
     #### Create output directory for dpkg-deb
-    mkdir -p out/usr/local/bin
-    cp https_dns_proxy out/usr/local/bin
+    mkdir -p out/usr/bin
+    cp https_dns_proxy out/usr/bin
 
     mkdir -p out/DEBIAN
     export version="$version"
     envsubst '${version}' < debian/control > out/DEBIAN/control 
 
-    mkdir -p out/usr/lib/systemd/system/
-    cp https-dns-proxy.service out/usr/lib/systemd/system
+    mkdir -p out/etc/default
+    cp https-dns-proxy.default out/etc/default/
+
+    mkdir -p out/lib/systemd/system/
+    cp https-dns-proxy.service out/lib/systemd/system
 
     dpkg-deb --build out https-dns-proxy_${version}_amd64.deb
 }
