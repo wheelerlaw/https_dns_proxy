@@ -1,5 +1,5 @@
 Package: https-dns-proxy
-Version: 0.1
+Version: ${version}
 Architecture: amd64
 Maintainer: Wheeler Law <whelderwheels613@gmail.com>
 Depends: libev4, libcurl4, libc-ares2

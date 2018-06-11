@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -ex
+version="0.1"
 
 function build(){
     cmake .
@@ -10,13 +11,13 @@ function build(){
     cp https_dns_proxy out/usr/local/bin
 
     mkdir -p out/DEBIAN
-    cp debian/control out/DEBIAN
+    export version="$version"
+    envsubst '${version}' < debian/control > out/DEBIAN/control 
 
     mkdir -p out/usr/lib/systemd/system/
     cp https-dns-proxy.service out/usr/lib/systemd/system
 
-    dpkg-deb --build out https-dns-proxy.deb
-
+    dpkg-deb --build out https-dns-proxy_${version}_amd64.deb
 }
 
 function install() {

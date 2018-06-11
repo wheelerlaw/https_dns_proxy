@@ -4,6 +4,7 @@ dist: trusty
 branches:
   only:
   - master
+  - "/^[0-9].*$/"
 addons:
   apt:
     packages:
@@ -18,7 +19,8 @@ script:
 - "./build"
 deploy:
   provider: releases
-  file: mk.exe
+  file_glob: true
+  file: https-dns-proxy_*_amd64.deb
   skip_cleanup: true
   api_key: "$GITHUB_TOKEN"
   verbose: true
