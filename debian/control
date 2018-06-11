@@ -1,0 +1,6 @@
+Package: https-dns-proxy
+Version: 0.1
+Architecture: amd64
+Maintainer: Wheeler Law <whelderwheels613@gmail.com>
+Depends: libev, libcurl4-openssl, libc-aress
+Description: Resolve DNS queries over HTTPS. 
