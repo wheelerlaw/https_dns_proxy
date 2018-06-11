@@ -12,9 +12,10 @@ function build(){
     mkdir -p out/DEBIAN
     cp debian/control out/DEBIAN
 
-    dpkg-deb --build out https-dns-proxy.deb
+    mkdir -p out/usr/lib/systemd/system/
+    cp https-dns-proxy.service out/usr/lib/systemd/system
 
-    install
+    dpkg-deb --build out https-dns-proxy.deb
 
 }
 

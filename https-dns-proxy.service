@@ -1,0 +1,5 @@
+[Unit]
+Description=Resolve DNS queries over HTTPS. 
+
+[Service]
+ExecStart=/usr/local/bin/https_dns_proxy
